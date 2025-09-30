@@ -30,10 +30,10 @@ jobs:
 
       - name: Run tests
         env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}  # Go to your Github repo → Settings → Secrets and Variables → Actions → New repository secret
           SAUCE_PASSWORD: ${{ secrets.SAUCE_PASSWORD }}
         run: |
-          pytest -q --browser ${{ matrix.browser }} --slowmo 0 --html=reports/report-${{ matrix.browser }}.html --self-contained-html
+          pytest -q --browser ${{ matrix.browser }} --slowmo 0 -n auto --html=reports/report-${{ matrix.browser }}.html --self-contained-html
 
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
