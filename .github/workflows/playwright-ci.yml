@@ -30,7 +30,8 @@ jobs:
 
       - name: Run tests
         env:
-          # pass browser to pytest-playwright via CLI instead of env var
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_PASSWORD: ${{ secrets.SAUCE_PASSWORD }}
         run: |
           pytest -q --browser ${{ matrix.browser }} --headless --slowmo 0 --html=reports/report-${{ matrix.browser }}.html --self-contained-html
 
