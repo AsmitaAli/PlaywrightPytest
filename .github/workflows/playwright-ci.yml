@@ -1,0 +1,41 @@
+name: Playwright Python tests (matrix)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+        python-version: [3.11]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: python -m playwright install
+
+      - name: Run tests
+        env:
+          # pass browser to pytest-playwright via CLI instead of env var
+        run: |
+          pytest -q --browser ${{ matrix.browser }} --headless --slowmo 0 --html=reports/report-${{ matrix.browser }}.html --self-contained-html
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report-${{ matrix.browser }}
+          path: reports/report-${{ matrix.browser }}.html
